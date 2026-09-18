@@ -1,0 +1,137 @@
+\documentclass[a4paper,final]{article}
+% Add "final" option in the article to remove todo
+\usepackage[common_math_textnormal,todonotes,math_base_note,math_simple]{gatmeo}
+\usepackage{tikz-cd}
+\newcommand{\mynewpage}{\newpage}
+\fancyhead[R]{\thepage}
+
+
+\title{\bf{
+                Kazhdan-Lustig-Stanley polynomials and Chow polynomials for Bialynicki-Birula stratified spaces
+}}
+
+\newcommand\Gm{{\mathbb{G}_m}}
+\newcommand\Fq{{\mathbb{F}_q}}
+\newcommand\Fqs{{\mathbb{F}_{q^s}}}
+\newcommand\Fqb{{\overline{\mathbb{F}}_q}}
+\newcommandx\IP{\mathcal{I}(P)}
+\newcommandx*\CHM[1][1=M]{\text{CH}(#1)}
+\newcommandx*\XE[1][1=E]{X_{#1}}
+\newcommandx*\aXE[1][1=E]{\underline{X}_{#1}}
+\newcommandx*\XV[1][1=V]{X_{#1}}
+\newcommandx*\aXV[1][1=V]{\underline{X}_{#1}}
+\newcommandx*\aCHM[1][1=M]{\underline{\text{CH}}(#1)}
+\newcommandx\Bl[2]{\text{Bl}_{#1}(#2)}
+
+\begin{document}
+\maketitle
+\vspace{-3.5em}
+%\input{sections/abstract}
+
+\thispagestyle{empty}
+\tableofcontents
+\listoftodos
+
+\section{Introduction}
+
+Kazhdan-Lustig-Stanley (KLS) polynomials and Chow polynomials are elements in the incidence algebra of a (locally finite) weakly ranked poset that satisfy some recurance relations encoded by the poset. 
+We are interested in interpreting the polnyomials geometrically.
+
+Let $X$ be a variety over $\mathbb{F}_q$ with a smooth stratification 
+\[
+        X=\bigsqcup _{p\in P}V_p,
+\]
+i.e. each stratum $V_p$ is a smooth subvariety of $X$ and the closure of each stratum is a union of strata. We define a partial order on $P$ by putting $p\leq q$ if and only if $V_p\subseteq \overline{V_q}$, and a weak rank function by $r_{pq}=\dim V_p - \dim V_q$.
+Proudfoot introduces a framework to construct an element in the incidence algebra of $P$ and gave sufficient conditions for it to be KLS-polynomials. He shows that all Schubert varieties and toric varieties give rise to KLS-polynomials.
+
+In the case of $X$ being a toric variety, Michalek, Monin and Wang consider a different (possibly singular) stratification, the Bialynicki-Birula (BB) decomposition. The same framework of constructing an element in the incidence algebra extends. They show that if the chow quotient of $X$ is rationally smooth, then the constructed element is KLS-polynomials.
+They show that the constructed Chow polynomials is the Poincare polynomials of the Chow quotient.
+
+In this paper, we unified the two theory. In the case of $X$ being a $\Gm$-variety, we give sufficient conditions on $X$ such that we can construct KLS-polynomials. We also give sufficient conditions on the Chow quotient of $X$ such that we can construct Chow polynomials.
+Finally, we prove that Peterson varieties satisfy the conditions.
+
+\section{Combinatorics}
+
+Posets
+KLS-polynomials
+Chow polynomials
+
+\section{Geometric Setup}
+
+Fix a finite field $\mathbb{F}_q$ with algebraic closure $\overline{\mathbb{F}_q}$. Let $l$ be a prime not dividng $q$. For any variety $Z$ over $\mathbb{F}_q$, denote $IC_Z$ the $l$-adic intersection cohomology sheaf on the vareity $Z(\overline{F}_q)$ with the convention that $IC_Z$ is perverse without shifting.
+
+Let $X$ be a projective $\Gm$-variety over $\mathbb{F}_q$ with (finite) isolated fixed points. The positive and negative Bialynicki-Birula cell of $X$ corresponding to a fixed point $p\in X^\Gm$ is defined to be
+\[
+        X^+_p=\CB{x\in X\mid \lim_{t\to 0}t\cdot x=p}\textnormal{ and }
+        X^-_p=\CB{x\in X\mid \lim_{t\to \infty }t\cdot x=p}
+\]
+respectively. $X^_p$ and $X^-_p$ can be singular in general. 
+For each $p,q\in P$, define
+\[
+        U_{pq}:=X^-_p\cap X^+_q\textnormal{ and }
+        Z_{pq}:=X^-_p\cap \overline{X^+_q}.
+\]
+
+Further assume that the BB-decomposition 
+\[
+        X=\bigsqcup _{p\in P}X^+_p
+\]
+is a stratification, i.e. the closure of each stratum is a union of strata. We define a partial order on $P$ by putting $p\leq q$ if and only if $X^+_p\subseteq \overline{X^+_q}$, and a weak rank function by $r_{pq}=\dim X^+_p - \dim X^+_q$.
+Hence 
+\[
+        \overline{X^+_q}=\bigsqcup_{p\leq q}X_p^+,
+\]
+Geometrically, a point in $U_{pq}$ gives a $\Gm$-orbit whose $t\rightarrow 0$ endpoint is $q$ and whose $t\rightarrow \infty $ endpoint is $p$, i.e. $p\in \overline{X^+_q}$.
+In particular, $U_{pq}\neq \emptyset$ implies $p\leq q$.
+Hence
+\begin{equation}
+        Z_{pr}=\bigsqcup_{p\leq q\leq r}U_{pq}.
+\end{equation}
+
+Note that $X^-_p$ is a weighted affine cone with cone point $p$, i.e. the $\mathbb{Z}$-grading on the affine coordinate ring $\mathbb{F}_q[X^-_p]$ induced by the $\Gm$ action is non-negative and the vanishing locus of the ideal of positively graded elements is $p$. And $\overline{X^+_q}$ is a closed $\Gm$-invariant subvariety. Hence $Z_{pr}$ is a weighted affine cone with cone point $p$.
+
+Following the notation of Proudfoot, we write $IH_z^*(Z)$ to denote the cohomology of the stalk of $IC_Z$ at $z\in Z$. For $p,q\in P$, we denote $IH^*_{pq}:=IH^*_{p}(\overline{X^+_q})$. For a weighted affine cone, it is well-known that the stalk cohomology of the IC sheaf at the cone point coincide with the global intersection cohomology (add reference), i.e.
+\begin{equation}
+        IH_p(Z_{pr})=IH(Z_{pr}).
+\end{equation}
+
+\begin{definition}[def:]{}
+        We say $X$ satisfy
+        \begin{labeling}
+                \item [IC-locality]
+        if for all 
+        $p\leq q\leq r\in P$ and $u\in U_{pq}$, then $IH^*_{qr}=IH^*_u(Z_{pr})$, and
+\item [polynomial point-count] if we have an element $\kappa\in \IP$ such that for all $p\leq q\in P$ and all positve inteers $s$, 
+        \[
+                \kappa_{pq}(q^s)=|U_{pq}(\mathbb{F}_{q^s})|.
+        \]
+        \end{labeling}
+\end{definition}
+
+\begin{theorem}[thm:]{}
+        Let $X$ be a projective $\Gm$-variety with isolated fixed-points satysfing IC-locality and polynomial point-count. Then $\kappa$ is a $P$-kernel.
+        \begin{proof}
+                The proof uses Poincare duality (corresponding to $\overline{f}$)and the Grothendiect-Lefschetz formula (corresponding to $\kappa f$). By the convension of IC sheaf being self-dual without shift, for the $r=r_{pr}$-dimensional algebraic variety $Z_{pr}$, we have 
+                \[
+                        IH^i_c(Z_{pr})\simeq IH^{2r-i}(Z_{pr})^\vee(-r).
+                \]
+                By geometric Frobenius, the dual of an eigenvalue $\alpha$ contributes $q_r/\alpha$.
+                For $Z$ over $\Fq$ seperated of finite type, and $\mathcal{F}$ a constructible $l$-adic complex with frobenius structure, the Grothendiect-Lefschetz formula says that 
+                \[
+                        \sum_{i}^{}(-1)^i Tr(Fr^s; H^i_c(Z_\Fqb, \mathcal{F}))=\sum_{z\in Z(\Fqs)}^{}Tr(Fr^s_z;\mathcal{F}_{\overline{z}}),
+                \]
+                where $Fr^s_x$ means and $\overline{z}$ means.
+                In the case of $X=Z_{pr}$, and $\mathcal{F}=IC_{Z_{pr}}$, we have
+        \end{proof}
+\end{theorem}
+
+<++>
+
+%Bialynichi-Birula original work is on smooth complete $\Gm$-variety. He shows that the cells are locally closed subvariety isomorphic to some affine spaces $\mathbb{A}^n$. 
+
+
+%\clearpage
+%\bibliographystyle{alpha}
+%\bibliography{bibliography/ref_group_cohomology_of_periodized_hypertoric}
+
+\end{document}
