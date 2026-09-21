@@ -1,4 +1,4 @@
-\documentclass[a4paper,final]{article}
+\documentclass[a4paper]{article}
 % Add "final" option in the article to remove todo
 \usepackage[common_math_textnormal,todonotes,math_base_note,math_simple]{gatmeo}
 \usepackage{tikz-cd}
@@ -7,11 +7,15 @@
 
 
 \title{\bf{
-                Kazhdan-Lustig-Stanley polynomials and Chow polynomials for Bialynicki-Birula stratified spaces
+                Kazhdan-Lusztig-Stanley polynomials and Chow polynomials for Bia{\l}ynicki-Birula stratified spaces
 }}
 
 \newcommand\Gm{{\mathbb{G}_m}}
 \newcommand\Fq{{\mathbb{F}_q}}
+\newcommand\Ql{{\mathbb{Q}_l}}
+\newcommand\LL{{\mathbb{L}}}
+\newcommand\II{{\mathcal{I}}}
+\newcommand\Qlb{{\overline{\mathbb{Q}}_l}}
 \newcommand\Fqs{{\mathbb{F}_{q^s}}}
 \newcommand\Fqb{{\overline{\mathbb{F}}_q}}
 \newcommandx\IP{\mathcal{I}(P)}
@@ -34,104 +38,314 @@
 
 \section{Introduction}
 
-Kazhdan-Lustig-Stanley (KLS) polynomials and Chow polynomials are elements in the incidence algebra of a (locally finite) weakly ranked poset that satisfy some recurance relations encoded by the poset. 
-We are interested in interpreting the polnyomials geometrically.
+Kazhdan-Lusztig-Stanley (KLS) polynomials and Chow polynomials are elements in the incidence algebra of a (locally finite) weakly ranked poset that satisfy some recurrence relations encoded by the poset. 
+We are interested in interpreting the polynomials geometrically.
 
 Let $X$ be a variety over $\mathbb{F}_q$ with a smooth stratification 
 \[
-        X=\bigsqcup _{p\in P}V_p,
+        X=\bigsqcup _{x\in P}V_x,
 \]
-i.e. each stratum $V_p$ is a smooth subvariety of $X$ and the closure of each stratum is a union of strata. We define a partial order on $P$ by putting $p\leq q$ if and only if $V_p\subseteq \overline{V_q}$, and a weak rank function by $r_{pq}=\dim V_p - \dim V_q$.
-Proudfoot introduces a framework to construct an element in the incidence algebra of $P$ and gave sufficient conditions for it to be KLS-polynomials. He shows that all Schubert varieties and toric varieties give rise to KLS-polynomials.
+i.e. each stratum $V_x$ is a smooth subvariety of $X$ and the closure of each stratum is a union of strata. We define a partial order on $P$ by putting $x\leq y$ if and only if $V_x\subseteq \overline{V_y}$, and a weak rank function by $r_{xy}:=\dim V_y - \dim V_x$.
+Proudfoot~\cite{Proudfoot2018} introduces a geometric framework in which point counts define a $P$-kernel and intersection cohomology realizes the associated KLS functions. He shows that all Schubert varieties and toric varieties give rise to KLS-polynomials.
 
-In the case of $X$ being a toric variety, Michalek, Monin and Wang consider a different (possibly singular) stratification, the Bialynicki-Birula (BB) decomposition. The same framework of constructing an element in the incidence algebra extends. They show that if the chow quotient of $X$ is rationally smooth, then the constructed element is KLS-polynomials.
-They show that the constructed Chow polynomials is the Poincare polynomials of the Chow quotient.
+In the case of $X$ being a toric variety, Micha{\l}ek, Monin, and Wang~\cite{MichalekMoninWang2026} consider a different (possibly singular) stratification, the Bia{\l}ynicki-Birula (BB) decomposition. The same framework for constructing an element in the incidence algebra extends. They show that if the Chow quotient of $X$ is rationally smooth, then the entries of the constructed element are KLS-polynomials.
+They show that the constructed Chow polynomials are the Poincar\'e polynomials of the Chow quotient.
 
-In this paper, we unified the two theory. In the case of $X$ being a $\Gm$-variety, we give sufficient conditions on $X$ such that we can construct KLS-polynomials. We also give sufficient conditions on the Chow quotient of $X$ such that we can construct Chow polynomials.
-Finally, we prove that Peterson varieties satisfy the conditions.
+In this paper, we unify the two theories. In the case of $X$ being a $\Gm$-variety, we give sufficient conditions on $X$ such that we can construct KLS-polynomials. We also give sufficient conditions on the Chow quotient of $X$ such that we can construct Chow polynomials.
 
 \section{Combinatorics}
 
-Posets
-KLS-polynomials
-Chow polynomials
+A \vocab{poset} is a set $P$ with a reflexive, antisymmetric, and transitive relation $\leq$. We say that $P$ is locally finite if, for all $x\leq y\in P$,  the set
+\[
+        [x,y]:=\{z\in P\mid x\leq z\leq y\}
+\]
+is finite. 
+A \vocab{weak rank function} assigns an integer $r_{xy}$ to each interval, with $r_{xx}=0$, $r_{xy}>0$ for $x<y$, and
+\[
+        r_{xz}=r_{xy}+r_{yz}\qquad(x\leq y\leq z).
+\]
+We call $P$ together with such a function a \vocab{weakly ranked poset}.
+
+For a commutative ring $R$ with identity, define its \vocab{incidence algebra} by
+\[
+        \II(P,R):=\{F:\{(x,y)\in P^2\mid x\leq y\}\longrightarrow R\}.
+\]
+If $P$ is locally finite, $\II(P,R)$ admits a ring structure with pointwise addition and product given by convolution:
+\[
+        (FG)_{xz}=\sum_{x\leq y\leq z}F_{xy}G_{yz}.
+\]
+The identity is the element $\delta$ with $\delta_{xx}=1_R$ and $\delta_{xy}=0$ for $x<y$. When the coefficient ring is omitted, we use the convention
+\[
+        \II(P):=\II(P,\mathbb{Z}[t]).
+\]
+
+\begin{lemma}[lem:incidence_inverse]{}
+        An element $F\in\II(P,R)$ has a two-sided inverse if and only if $F_{xx}\in R^\times$ for every $x\in P$. 
+        \begin{proof}
+                The proof of \cite[Lemma~2.1]{Proudfoot2018} extends for any commutative ring $R$.
+        \end{proof}
+\end{lemma}
+
+For a weakly ranked poset $P$, let
+\[
+        \II_r(P) :=
+        \left\{ F\in\II(P) \,\middle|\, \deg F_{xy}\leq r_{xy} \text{ for every }x\leq y \right\}.
+\]
+The additivity of the weak rank function implies that $\II_r(P)$ is a subalgebra of $\II(P)$. 
+Define the \vocab{bar involution} on $\II_r(P)$ by
+\[
+        \overline{F}_{xy}(t)
+        :=
+        t^{r_{xy}}F_{xy}(t^{-1}).
+\]
+The weak rank identity $r_{xz}=r_{xy}+r_{yz}$ implies $\overline{FG}=\overline F\,\overline G$ and $\overline{\overline F}=F$.
+
+\begin{definition}{}
+        An element $\kappa\in\II_r(P)$ is called a \vocab{$P$-kernel} if $\kappa_{xx}=1$ for every $x\in P$ and 
+        \[
+                \overline{\kappa}\,\kappa=\delta.
+        \]
+\end{definition}
 
 \section{Geometric Setup}
 
-Fix a finite field $\mathbb{F}_q$ with algebraic closure $\overline{\mathbb{F}_q}$. Let $l$ be a prime not dividng $q$. For any variety $Z$ over $\mathbb{F}_q$, denote $IC_Z$ the $l$-adic intersection cohomology sheaf on the vareity $Z(\overline{F}_q)$ with the convention that $IC_Z$ is perverse without shifting.
+We follow the notation of Proudfoot~\cite[Section~3]{Proudfoot2018}. In our case, some of his assumptions are automatic.
 
-Let $X$ be a projective $\Gm$-variety over $\mathbb{F}_q$ with (finite) isolated fixed points. The positive and negative Bialynicki-Birula cell of $X$ corresponding to a fixed point $p\in X^\Gm$ is defined to be
+Fix a finite field $\mathbb{F}_q$ with algebraic closure $\overline{\mathbb{F}_q}$. Let $l$ be a prime not dividing $q$. For any variety $Z$ over $\mathbb{F}_q$, denote by $IC_Z$ the $l$-adic intersection cohomology sheaf on the variety $Z(\overline{\mathbb{F}}_q)$ with the convention that we do not shift $IC_Z$ to make it perverse. In particular, if $Z$ is smooth, $IC_Z$ is isomorphic to the constant sheaf in degree zero.
+
+Let $X$ be a normal projective $\Gm$-variety over $\mathbb{F}_q$ with finitely many isolated fixed points $P:=X^\Gm$. After replacing $\mathbb{F}_q$ by a finite extension if necessary, we assume that every fixed point is $\mathbb{F}_q$-rational.
+
+The positive and negative Bia{\l}ynicki-Birula cells of $X$ corresponding to a fixed point $x\in X^\Gm$ are defined to be
 \[
-        X^+_p=\CB{x\in X\mid \lim_{t\to 0}t\cdot x=p}\textnormal{ and }
-        X^-_p=\CB{x\in X\mid \lim_{t\to \infty }t\cdot x=p}
+        X^+_x=\CB{p\in X\mid \lim_{t\to 0}t\cdot p=x}\textnormal{ and }
+        X^-_x=\CB{p\in X\mid \lim_{t\to \infty }t\cdot p=x}
 \]
-respectively. $X^_p$ and $X^-_p$ can be singular in general. 
-For each $p,q\in P$, define
+respectively. $X^+_x$ and $X^-_x$ can be singular in general. 
+For each $x,y\in P$, define
 \[
-        U_{pq}:=X^-_p\cap X^+_q\textnormal{ and }
-        Z_{pq}:=X^-_p\cap \overline{X^+_q}.
+        U_{xy}:=\left(X^-_x\times _X X^+_y\right)_{\textnormal{red}}\textnormal{ and }
+        Z_{xy}:=\left(X^-_x\times _X \overline{X^+_y}\right)_{\textnormal{red}}.
 \]
 
-Further assume that the BB-decomposition 
+Assume further that the BB-decomposition 
 \[
-        X=\bigsqcup _{p\in P}X^+_p
+        X=\bigsqcup _{x\in P}X^+_x
 \]
-is a stratification, i.e. the closure of each stratum is a union of strata. We define a partial order on $P$ by putting $p\leq q$ if and only if $X^+_p\subseteq \overline{X^+_q}$, and a weak rank function by $r_{pq}=\dim X^+_p - \dim X^+_q$.
+is a stratification, i.e. the closure of each stratum is a union of strata. We define a partial order on $P$ by putting $x\leq y$ if and only if $X^+_x\subseteq \overline{X^+_y}$, and a weak rank function by $r_{xy}:=\dim X^+_y - \dim X^+_x$.
 Hence 
 \[
-        \overline{X^+_q}=\bigsqcup_{p\leq q}X_p^+,
+        \overline{X^+_y}=\bigsqcup_{x\leq y}X_x^+.
 \]
-Geometrically, a point in $U_{pq}$ gives a $\Gm$-orbit whose $t\rightarrow 0$ endpoint is $q$ and whose $t\rightarrow \infty $ endpoint is $p$, i.e. $p\in \overline{X^+_q}$.
-In particular, $U_{pq}\neq \emptyset$ implies $p\leq q$.
+Geometrically, a point in $U_{xy}$ gives a $\Gm$-orbit whose $t\rightarrow 0$ endpoint is $y$ and whose $t\rightarrow \infty $ endpoint is $x$, i.e. $x\in \overline{X^+_y}$.
+In particular, $U_{xy}\neq \emptyset$ implies $x\leq y$.
 Hence
 \begin{equation}
-        Z_{pr}=\bigsqcup_{p\leq q\leq r}U_{pq}.
+        Z_{xz}=\bigsqcup_{x\leq y\leq z}U_{xy}.
+        \label{eq:Z_decompose_as_U}
 \end{equation}
 
-Note that $X^-_p$ is a weighted affine cone with cone point $p$, i.e. the $\mathbb{Z}$-grading on the affine coordinate ring $\mathbb{F}_q[X^-_p]$ induced by the $\Gm$ action is non-negative and the vanishing locus of the ideal of positively graded elements is $p$. And $\overline{X^+_q}$ is a closed $\Gm$-invariant subvariety. Hence $Z_{pr}$ is a weighted affine cone with cone point $p$.
+By Drinfeld's theory of attractors and repellers, the limit morphism
+from the attractor to the fixed-point locus is affine
+\cite[Theorem~1.4.2]{Drinfeld2013}. Applying this to the inverse
+$\Gm$-action, and using that $x$ is an isolated fixed point, we see
+that $X_x^-$ is affine. Moreover, the inverse $\Gm$-action on $X_x^-$
+extends to an $\mathbb A^1$-action contracting $X_x^-$ to $x$.
+Consequently,
+\[
+        \mathbb F_q[X_x^-]=\bigoplus_{i\geq 0}A_i,
+        \qquad A_0=\mathbb F_q.
+\]
+Since $\overline{X_z^+}$ is closed and $\Gm$-invariant,
+\[
+        Z_{xz}=X_x^-\times_X\overline{X_z^+}
+\]
+is defined in $X_x^-$ by a homogeneous ideal. Hence $Z_{xz}$ is a
+weighted affine cone with cone point $x$.
 
-Following the notation of Proudfoot, we write $IH_z^*(Z)$ to denote the cohomology of the stalk of $IC_Z$ at $z\in Z$. For $p,q\in P$, we denote $IH^*_{pq}:=IH^*_{p}(\overline{X^+_q})$. For a weighted affine cone, it is well-known that the stalk cohomology of the IC sheaf at the cone point coincide with the global intersection cohomology (add reference), i.e.
+We write $IH_p^*(Z)$ to denote the cohomology of the stalk of $IC_Z$ at $p\in Z$. For $x,y\in P$, we denote $IH^*_{xy}:=IH^*_{x}(\overline{X^+_y})$. For a weighted affine cone, contraction to the cone point induces a Frobenius-equivariant isomorphism~\cite[Lemma~4.5(a)]{KazhdanLusztig1980} 
+
 \begin{equation}
-        IH_p(Z_{pr})=IH(Z_{pr}).
+        IH_x(Z_{xz})=IH(Z_{xz}).
+        \label{eq:IH_cone_pt}
 \end{equation}
 
-\begin{definition}[def:]{}
-        We say $X$ satisfy
-        \begin{labeling}
-                \item [IC-locality]
-        if for all 
-        $p\leq q\leq r\in P$ and $u\in U_{pq}$, then $IH^*_{qr}=IH^*_u(Z_{pr})$, and
-\item [polynomial point-count] if we have an element $\kappa\in \IP$ such that for all $p\leq q\in P$ and all positve inteers $s$, 
+Let $W_{\mathbb F_q}\cong\mathbb Z$ be the Weil group of $\mathbb F_q$, generated by geometric Frobenius $Fr_q$, and put
+\[
+        R_q:=K_0\!\left(\operatorname{Rep}_{\Qlb}(W_{\mathbb F_q})\right).
+\]
+Here $\operatorname{Rep}_{\Qlb}(W_{\mathbb F_q})$ is the category of finite-dimensional $\Qlb$-representations of $W_{\mathbb F_q}$, equivalently finite-dimensional $\Qlb$-vector spaces with an invertible endomorphism. For such a representation $V$, write $[V]\in R_q$ for its class. Addition is induced by short exact sequences and multiplication by tensor product. Traces extend additively to virtual classes in $R_q$.
+
+\begin{lemma}[lem:frobenius_traces]{}
+        For $A,B\in R_q$, we have $A=B$ if and only if
         \[
-                \kappa_{pq}(q^s)=|U_{pq}(\mathbb{F}_{q^s})|.
+                \operatorname{Tr}(Fr_q^s;A)=\operatorname{Tr}(Fr_q^s;B)
+                \qquad\text{for every }s\geq 1.
         \]
-        \end{labeling}
+        \begin{proof}
+                Equality of classes implies equality of traces. Conversely, let $\alpha_1,\dots,\alpha_m$ be the distinct Frobenius eigenvalues in $A-B$, with virtual multiplicities $n_1,\dots,n_m$. Equality of traces gives
+                \[
+                        \sum_{i=1}^m n_i\alpha_i^s=0\qquad(s\geq 1).
+                \]
+                For $s=1,\dots,m$, the coefficient matrix is a Vandermonde matrix multiplied by the invertible diagonal matrix with entries $\alpha_1,\dots,\alpha_m$. Thus all $n_i$ vanish, $A=B$.
+        \end{proof}
+\end{lemma}
+The ring $R_q$ remembers the eigenvalues with multiplicities but forgets Jordan blocks, just as traces of Frobenius powers do. In contrast, $K_0(\operatorname{Vect}_{\Qlb})\cong\mathbb Z$ remembers only dimension.
+
+Duality defines an involution
+\[
+        [V]^\vee:=[V^\vee],
+\]
+where Frobenius acts on $V^\vee$ by the inverse transpose. For a bounded complex $C^\bullet$ with Frobenius action, put
+\[
+        [C^\bullet]:=\sum_i(-1)^i[H^i(C^\bullet)]\in R_q.
+\]
+Let
+\[
+        \LL:=[\Qlb(-1)]\in R^\times_q.
+\]
+Geometric Frobenius acts on this Tate twist by $q$, so
+\[
+        \operatorname{Tr}(Fr_q^s;\LL^j)=q^{js}
+        \qquad(s\geq 1,\ j\in\mathbb Z).
+\]
+
+The following theorems play a central role in our proof:
+\begin{theorem}[thm:Grothendieck_Lefschetz_formula]{Grothendieck--Lefschetz trace formula \cite[III.12.1(4)]{KiehlWeissauer2001}}
+        Let $Z$ be separated and of finite type over $\Fq$, and let $\mathcal F$ be a constructible $l$-adic complex with Weil structure. For every $s\geq 1$,
+        \[
+                \operatorname{Tr}\!\left(Fr_q^s;[R\Gamma_c(Z_{\Fqb},\mathcal F)]\right)
+                =\sum_{u\in Z(\Fqs)}
+                \operatorname{Tr}\!\left(Fr_{q^s,u};[\mathcal F_{\bar u}]\right),
+        \]
+        where $\bar u$ is a geometric point above $u$ and $Fr_{q^s,u}$ denotes geometric Frobenius acting on the stalk at $\bar u$. In particular,
+        \[
+                \operatorname{Tr}\!\left(Fr_q^s;[R\Gamma_c(Z_{\Fqb},\Qlb)]\right)
+                =|Z(\Fqs)|.
+        \]
+\end{theorem}
+
+\begin{theorem}[thm:Verdier_duality]{Verdier duality \cite[II.7.3]{KiehlWeissauer2001}}
+        Let $a:Z\to\operatorname{Spec}\Fq$ be separated and of finite type. For a constructible $l$-adic complex $\mathcal F$, there is a canonical isomorphism
+        \[
+                R\Gamma_c(Z_{\Fqb},\mathcal F)^\vee
+                \simeq R\Gamma(Z_{\Fqb},\mathbb D_Z\mathcal F),
+        \]
+        where $\mathbb D_Z\mathcal F:=R\mathcal{H}om(\mathcal F,a^!\Qlb)$ is the Verdier dual. If $\mathcal F$ carries a Weil structure, this isomorphism is Frobenius-equivariant.
+
+        If $Z$ is pure of dimension $d$, then, with our unshifted normalization,
+        \[
+                \mathbb D_Z(IC_Z)\simeq IC_Z(d)[2d].
+        \]
+        Consequently,
+        \[
+                [R\Gamma_c(Z_{\Fqb},IC_Z)]
+                =\LL^d[R\Gamma(Z_{\Fqb},IC_Z)]^\vee
+                \qquad\text{in }R_q.
+        \]
+\end{theorem}
+
+\begin{definition}[def:geometric_hypotheses]{}
+        We say that $X$ satisfies \vocab{Frobenius-compatible IC-locality} if, for every $x\leq y\leq z$, every $s\geq 1$, and every $p\in U_{xy}(\Fqs)$, we have an isomorphism of graded Frobenius modules
+        \[
+                \left(IH_p^\bullet(Z_{xz}),Fr_{q^s,p}\right)
+                \simeq
+                \left(IH_{yz}^\bullet,Fr_q^s\right).
+        \]
+        We say that $X$ satisfies \vocab{polynomial point-count} if there is $\kappa\in\II_r(P)$ such that, for every $x\leq y$ and every $s\geq 1$,
+        \[
+                |U_{xy}(\Fqs)|=\kappa_{xy}(q^s).
+        \]
+        We say that $X$ is \vocab{dimensionally transverse} if for every $x\leq z$,
+        \[
+                Z_{xz}\text{ is pure of dimension }r_{xz}.
+        \]
 \end{definition}
 
+For $x\leq z$, put
+\[
+        F_{xz}:=[IH_{xz}^\bullet]
+        =\sum_i(-1)^i[IH_{xz}^i]\in R_q.
+\]
+Then $F\in\II(P,R_q)$. Define the bar operation on $\II(P,R_q)$ by
+\[
+        \overline{F}_{xz}:=\LL^{r_{xz}}F_{xz}^\vee.
+\]
+Since $r_{xz}=r_{xy}+r_{yz}$ and $(\LL^aV)^\vee=\LL^{-a}V^\vee$, this is an algebra involution.
+Define evaluation at $\LL$ entrywise by
+\[
+        \kappa(\LL)_{xz}:=\kappa_{xz}(\LL).
+\]
+Since $\overline{\kappa(\LL)}_{xz}=\LL^{r_{xz}}\kappa_{xz}(\LL^{-1})$, 
+evaluation is compatible with the bar operation, i.e. $\overline{\kappa(\LL)}=\overline{\kappa}(\LL)$.
+
 \begin{theorem}[thm:]{}
-        Let $X$ be a projective $\Gm$-variety with isolated fixed-points satysfing IC-locality and polynomial point-count. Then $\kappa$ is a $P$-kernel.
+        Let $X$ be as above, satisfying Frobenius-compatible IC-locality and polynomial point-count, and assume that $X$ is dimensionally transverse. Then $\kappa$ is a $P$-kernel.
         \begin{proof}
-                The proof uses Poincare duality (corresponding to $\overline{f}$)and the Grothendiect-Lefschetz formula (corresponding to $\kappa f$). By the convension of IC sheaf being self-dual without shift, for the $r=r_{pr}$-dimensional algebraic variety $Z_{pr}$, we have 
+                Take $x\leq z$. By Frobenius-compatible IC-locality with $y=x,u=x$, and $s=1$, and \Cref{eq:IH_cone_pt},
                 \[
-                        IH^i_c(Z_{pr})\simeq IH^{2r-i}(Z_{pr})^\vee(-r).
+                        F_{xz}=[IH_{xz}^\bullet]=[IH_x^\bullet(Z_{xz})]=[IH^\bullet(Z_{xz})].
                 \]
-                By geometric Frobenius, the dual of an eigenvalue $\alpha$ contributes $q_r/\alpha$.
-                For $Z$ over $\Fq$ seperated of finite type, and $\mathcal{F}$ a constructible $l$-adic complex with frobenius structure, the Grothendiect-Lefschetz formula says that 
+                Since $Z_{xz}$ is pure of dimension $r_{xz}$, \Cref{thm:Verdier_duality} gives
                 \[
-                        \sum_{i}^{}(-1)^i Tr(Fr^s; H^i_c(Z_\Fqb, \mathcal{F}))=\sum_{z\in Z(\Fqs)}^{}Tr(Fr^s_z;\mathcal{F}_{\overline{z}}),
+                        [IH_c^\bullet(Z_{xz})]=\LL^{r_{xz}}F_{xz}^\vee=\overline{F}_{xz}.
                 \]
-                where $Fr^s_x$ means and $\overline{z}$ means.
-                In the case of $X=Z_{pr}$, and $\mathcal{F}=IC_{Z_{pr}}$, we have
+                Now fix $s\geq 1$. By \Cref{thm:Grothendieck_Lefschetz_formula}, \Cref{eq:Z_decompose_as_U}, Frobenius-compatible IC-locality, and polynomial point-count,
+                \begin{align*}
+                        \operatorname{Tr}(Fr_q^s;\overline{F}_{xz})
+                        &=\operatorname{Tr}(Fr_q^s;[IH_c^\bullet(Z_{xz})])\\
+                        &=\sum_{x\leq y\leq z}\sum_{u\in U_{xy}(\Fqs)}
+                        \operatorname{Tr}\!\left(Fr_{q^s,u};[IH_u^\bullet(Z_{xz})]\right)\\
+                        &=\sum_{x\leq y\leq z}|U_{xy}(\Fqs)|\operatorname{Tr}(Fr_q^s;F_{yz})\\
+                        &=\sum_{x\leq y\leq z}\kappa_{xy}(q^s)\operatorname{Tr}(Fr_q^s;F_{yz})\\
+                        &=\operatorname{Tr}\!\left(Fr_q^s;(\kappa(\LL)F)_{xz}\right).
+                \end{align*}
+                Since this holds for every $s\geq 1$, \Cref{lem:frobenius_traces} implies
+                \[
+                        \overline{F}=\kappa(\LL)F.
+                \]
+                Applying the bar involution gives
+                \[
+                        F=\overline{\kappa}(\LL)\overline{F}
+                        =\overline{\kappa}(\LL)\kappa(\LL)F.
+                \]
+                Since $Z_{xx}$ is a zero-dimensional weighted affine cone with cone point $x$, its underlying reduced variety is $\{x\}$. Hence $F_{xx}=1_{R_q}$, so $F$ is invertible by \Cref{lem:incidence_inverse}. Cancelling $F$ gives
+                \[
+                        \overline{\kappa}(\LL)\kappa(\LL)=\delta.
+                \]
+                The proof follows from the homomorphism
+                \[
+                        \mathbb Z[t,t^{-1}]\longrightarrow R_q,\qquad t\longmapsto\LL,
+                \]
+                is injective, and $U_{xx}=Z_{xx}$ has one rational point over every finite extension.
         \end{proof}
 \end{theorem}
 
-<++>
+\begin{remark}
+        The theorem does not require chastity.
+        If, in addition, every $IH_{pr}^\bullet$ is chaste, i.e. $IH_{pr}^{2i+1}=0$ and geometric Frobenius acts on $IH_{pr}^{2i}$ by multiplication by $q^i$, then
+        \[
+                F_{xz}=f_{xz}(\LL),
+                \qquad
+                f_{xz}(t):=
+                \sum_{i\geq0}\dim IH_{xz}^{2i}\,t^i.
+        \]
+        Indeed, $Tr(Fr_q^s;F_{xz}) = f_{xz}(q^s)$.  Under this identification, the involution
+        \[
+                F_{xz}\longmapsto
+                \LL^{r_{xz}}F_{xz}^\vee
+        \]
+        becomes the usual bar involution
+        \[
+                f_{xz}(t)\longmapsto
+                t^{r_{xz}}f_{xz}(t^{-1}).
+        \]
+        Thus, under chastity, the argument above reduces to Proudfoot's polynomial-valued proof \cite[Section~3.2]{Proudfoot2018}.
+\end{remark}
 
 %Bialynichi-Birula original work is on smooth complete $\Gm$-variety. He shows that the cells are locally closed subvariety isomorphic to some affine spaces $\mathbb{A}^n$. 
 
 
-%\clearpage
-%\bibliographystyle{alpha}
-%\bibliography{bibliography/ref_group_cohomology_of_periodized_hypertoric}
+\bibliographystyle{alpha}
+\bibliography{main_kls}
 
 \end{document}
