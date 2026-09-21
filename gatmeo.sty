@@ -1,0 +1,985 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{gatmeo}[gatmeo with declare options]
+
+%-Basic Packages
+  \RequirePackage[utf8]{inputenc} % use utf8 encode
+  \RequirePackage[pdftex,dvipsnames]{xcolor} % color plate
+  \RequirePackage{relsize} % font size: LARGE, small
+  \RequirePackage{indentfirst} % indent first par after section header
+  \RequirePackage{titlesec} % change title styles
+  \RequirePackage{import} % allow import file with relative reference
+                          % to pic and subfiles
+  \RequirePackage[obeyFinal]{todonotes} % todonotes
+  \setlength{\marginparwidth}{2cm}
+  \RequirePackage{relsize}
+\RequirePackage{setspace}
+\RequirePackage{lmodern}
+\RequirePackage{titling}
+  %-Graphs
+    \RequirePackage{float}
+    \RequirePackage{wrapfig}
+    \RequirePackage{cutwin}
+  %-Captions
+    \RequirePackage{caption}
+    \RequirePackage{subcaption}
+  %-Indices
+    \RequirePackage{imakeidx}
+    \makeindex
+
+%-Macros/Functions set-up
+  \RequirePackage{xstring} % working with list
+  \RequirePackage{ifthen}
+  \RequirePackage{forarray} % forloop stuff used in notes
+  \RequirePackage{xargs} % multi-optional variables
+  \RequirePackage{xparse} % multivariable-func
+  \RequirePackage{etoolbox} % multivariable-macro
+  \RequirePackage[most]{tcolorbox}
+  \RequirePackage{mdframed} % frame
+
+%-OmegaTong First Big
+  \RequirePackage{textcase}
+  \def\myFBRSC#1{{\larger[0]{\MakeTextUppercase{#1}}}\scshape }
+  \DeclareRobustCommand{\FirstBigRestSmallCaps}[1]{\myFBRSC #1}
+  \newcommand{\omegat}{\FirstBigRestSmallCaps{Omega Tong}}
+
+  \newcommand{\nbf}[1]{\noindent\textbf{#1}}
+%-Page Setup
+  %-Document Macros
+    \author{\omegat}
+  %-Default Dimension of Document
+    \RequirePackage{geometry}
+    \geometry{
+      left=0.75in,
+      right=0.75in,
+      top=1.25in,
+      bottom=0.75in,
+    }
+  %-Paragraph skip
+    \setlength{\parskip}{0.5em}
+  %-Header setting
+    \RequirePackage{fancyhdr}
+    \setlength{\headheight}{15pt}
+  %-hyperref toc hyperlink
+    \RequirePackage{hyperref}
+    \hypersetup{
+      %colorlinks=true, %set true if you want colored links
+      linktoc=all,   %set to all if you want both sections and subsections linked
+    }
+
+%-Custom Funcs
+  %-Set labeling
+    \RequirePackage{enumitem}
+    \newlist{labeling}{description}{2}
+    \setlist[labeling]{leftmargin=8em,style=nextline}
+  %-Vocab
+    \definecolor{vocabcolor}{RGB}{0,0,0}
+    %\newcommand{\vocab}[1]
+    %{\IfSubStr{#1}{!}
+    %  {\textcolor{}{\textbf{\StrBefore{#1}{!}~\StrBehind{#1}{!}}}\index{#1}}
+    %  {{\color{vocabcolor}{\textbf{#1}}\index{#1}\kern-1pt}}
+    %}
+    \newcommand{\vocab}[1]{\textbf{#1}}
+  %-Smart Add names and labels
+    \newcommand{\smartaddname}[1]{\ifstrempty{#1}{}{#1}}
+    \newcommand{\smartaddlabel}[2]{%
+      \ifthenelse{\equal{#1}{#2}}
+      {}
+      {\ifstrempty{#1}{}{\label{#1}}}%
+    }
+  %-Old smart labels
+    \ifdef\pdfstrcmp
+    {\let\asdel@strcmp\pdfstrcmp}
+    {\usepackage{pdftexcmds}\let\asdel@strcmp\pdf@strcmp}
+    \let\then\iffalse
+    \newcommand*\ifstrcmp{}
+    \def\ifstrcmp#1\with#2\then{\ifnum\asdel@strcmp{#1}{#2}=\z@}
+    \newcommand{\smartlabelcounter}[3]{\ifstrcmp#1\with #3\then #3#2\else #1\fi}
+  %Add brackets
+    \newcommand{\addbrackets}[1]{\ifstrempty{#1}{}{\ (#1)}}
+  %If element equal
+    \newcommand{\ifelementequal}[2]{
+        \ifthenelse{\equal{#1}{#2}}{\pagebreak}{}
+    }
+
+  %-Math Command
+    \newcommand{\abs}[1]{\left|#1\right|}
+    \newcommand{\ds}{\displastyle}
+    \newcommand{\ra}{\longrightarrow}
+
+%-Packages for Math
+  %-Math package
+    \RequirePackage{amsmath}
+    \RequirePackage{amssymb}
+  %-Math mapsfrom
+    %\RequirePackage{stmaryrd}
+  %-Asymptote
+    \RequirePackage{asymptote}
+  %-Commutative-Diagram-xy
+    \RequirePackage[all]{xy}
+  %-Calculate
+    \RequirePackage[nomessages]{fp}
+  %-datetime
+    \RequirePackage[nodayofweek]{datetime}
+    \RequirePackage[en-GB,showdow=false]{datetime2}
+    \DTMlangsetup[en-GB]{ord=raise,monthyearsep={,\space}}
+  %-Math-theorem
+    \RequirePackage[amsmath,thmmarks]{ntheorem}
+    \RequirePackage{cleveref}
+
+
+\DeclareOption{tight}{%
+  %---Dimension---------------------------------------------------
+    \geometry{
+      left=0.08\linewidth,
+      right=0.08\linewidth,
+      top=0.2\linewidth,
+      bottom=0.08\linewidth,
+    }
+}
+
+\DeclareOption{quaderno}{%
+  %---Dimension---------------------------------------------------
+    \geometry{
+      left=0.06\linewidth,
+      right=0.06\linewidth,
+      top=0.15\linewidth,
+      bottom=0.06\linewidth,
+    }
+    \geometry{paperwidth=6.9in, paperheight=9.2in}
+}
+
+\DeclareOption{quaderno_half}{%
+  %---Dimension---------------------------------------------------
+    \geometry{
+      left=0.06\linewidth,
+      right=0.06\linewidth,
+      top=0.15\linewidth,
+      bottom=0.06\linewidth,
+    }
+    \geometry{paperwidth=6in, paperheight=8in}
+}
+
+
+\DeclareOption{math_base_note}{%
+  %---Section Headers-----------------------------------------------
+    \definecolor{titlecolor}{RGB}{0,0,0}
+    \titleformat*{\section}{\Large\sffamily\bfseries\color{titlecolor}}
+    \titleformat*{\subsection}{\large\sffamily\bfseries\color{titlecolor}}
+    \titleformat*{\subsubsection}{\bfseries\sffamily\color{titlecolor}}
+}
+
+\DeclareOption{common_math_textnormal}{%
+  \newcommand{\im}{\textnormal{Im}}
+  \newcommand{\Span}{\textnormal{span}}
+  \newcommand{\codim}{\textnormal{codim}}
+  \newcommand{\Chi}{X}
+  \newcommand{\Tau}{T}
+  \newcommand{\ceil}[1]{\left\lceil #1\right\rceil}
+  \newcommand{\vect}[1]{{\boldsymbol{\mathrm{#1}}}}
+  \newcommand{\aut}{\textnormal{Aut}}
+  \newcommand{\sym}{\textnormal{Sym}}
+  \newcommand{\fz}[1]{\mathbb{Z}/#1\mathbb{Z}}
+  \newcommandx*\cnk[2][1=k,2=n]{\textstyle{\binom{[#2]}{#1}}}
+  \newcommand{\pmx}[1]{\begin{pmatrix}#1\end{pmatrix}}
+  \newcommand{\rank}{\textnormal{rank }}
+  \newcommand{\CB}[1]{\left\{#1\right\}}
+  \newcommand{\AB}[1]{\langle #1\rangle }
+  \newcommandx*\SZ[1][1=0]{\left\{#1\right\}}
+  \newcommandx*\LA[2][1=,2=]{($#1\Leftarrow #2$) }
+  \newcommandx*\RA[2][1=,2=]{($#1\Rightarrow #2$) }
+  \newcommandx*\LRA[2][1=,2=]{($#1\Leftrightarrow #2$) }
+  \newcommandx*\RLA[2][1=,2=]{($#1\Leftrightarrow #2$) }
+  \newcommand{\flds}[3]{#1_1 #2\dots #2 #1_{#3}}
+  \newcommand{\flcs}[3]{#1_1 #2\cdots #2 #1_{#3}}
+  \newcommand{\fllds}[3]{#1_1 #2 #1_2 #2\dots #2 #1_{#3}}
+  \newcommand{\fllcs}[3]{#1_1 #2 #1_2 #2\cdots #2 #1_{#3}}
+  \newcommand{\bdot}{{\boldsymbol{\cdot}}}
+  \newcommand\mapsfrom{\mathrel{\reflectbox{\ensuremath{\mapsto}}}}
+  \newcommand{\ctd}{\Rightarrow \Leftarrow }
+  \newcommand{\case}[1]{\begin{cases}#1\end{cases}}
+  \newcommandx*\IH[1][1=Induction Hypothesis]{\qquad \textnormal{(#1)}}
+}
+
+\DeclareOption{todonotes}{%
+  \newtoggle{todo-history}
+  \togglefalse{todo-history}
+  \newcommandx{\answer}[2][1=]{
+    \ifboolexpr{test {\iftoggle{todo-history}} or test {\ifstrempty{#1}}}{
+      \todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!15,bordercolor=OliveGreen,inline,#1]{\normalfont\textcolor{OliveGreen!80!black}{\textbf Ans:} #2}
+      }{
+    }
+  }
+  \newcommandx{\inquiry}[2][1=]{
+    \ifboolexpr{test {\iftoggle{todo-history}} or test {\ifstrempty{#1}}}{
+      \todo[linecolor=Plum,backgroundcolor=Plum!15,bordercolor=Plum,inline,#1]{\normalfont\textcolor{Plum!80!black}{\textbf Inquiry:} #2}
+      }{
+    }
+  }
+  \newcommandx{\missing}[2][1=]{
+    \ifboolexpr{test {\iftoggle{todo-history}} or test {\ifstrempty{#1}}}{
+      \todo[linecolor=red,backgroundcolor=red!15,bordercolor=red,inline]{\normalfont \textcolor{red!80!black}{\textbf TODO:} #2}
+      }{
+    }
+  }
+  \newcommandx{\minormissing}[2][1=]{
+    \ifboolexpr{test {\iftoggle{todo-history}} or test {\ifstrempty{#1}}}{
+      \todo[linecolor=red,backgroundcolor=green!10,bordercolor=green,inline]{\normalfont \textcolor{green!80!black}{\textbf Minor:} #2}
+      }{
+    }
+  }
+}
+
+\DeclareOption{math_simple}{%
+  % Simple math template having all theorem boxes
+  %-Section Headers
+    \titlespacing*{\section}
+    {0pt}{10pt}{10pt}
+    \titlespacing*{\subsection}
+    {0pt}{10pt}{10pt}
+    \titlespacing*{\subsubsection}
+    {0pt}{10pt}{10pt}
+  %-Top Bar
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyhead[L]{\leftmark}
+    \fancyhead[R]{Page \rule[-2pt]{1pt}{11pt} \thepage}
+  %-Set space
+    \mdfsetup{skipabove=6pt,skipbelow=0pt,linewidth=1,rightline=false,bottomline=false,topline=false,innerleftmargin=5pt,innerrightmargin=0pt,innertopmargin=2.5pt,innerbottommargin=2.5pt}
+    \setlength\abovedisplayskip{0pt}
+    \setlength\belowdisplayskip{0pt}
+    \setitemize{topsep=0pt,itemsep=0pt}%noitemsep
+    \setenumerate{topsep=0pt,itemsep=0pt}%noitemsep
+    \setlist[labeling]{leftmargin=8em,style=nextline,topsep=0pt,itemsep=0pt}
+  %---Theorems
+    \theoremseparator{.}
+    \makeatletter
+    \@ifclassloaded{book}{%
+      \newtheorem{thmm}{Theorem}[chapter]
+    }{%
+      \newtheorem{thmm}{Theorem}[section]
+    }
+    \makeatother  
+    \newtheorem{defi}[thmm]{Definition}
+    \newtheorem{crll}[thmm]{Corollary}
+    \newtheorem{ppsn}[thmm]{Proposition}
+    \newtheorem{ppty}[thmm]{Property}
+    \newtheorem{nttn}[thmm]{Notation}
+    \newtheorem{lemm}[thmm]{Lemma}
+    \newtheorem{moti}[thmm]{Motivation}
+    \newtheorem{ques}[thmm]{Question}
+    \newtheorem{ideaa}[thmm]{Idea}
+    \newtheorem{coje}[thmm]{Conjecture}
+    \theorembodyfont{\normalfont}
+    \newtheorem{exmp}[thmm]{Example}
+
+    \newenvironment{theorem}[2][]
+    {\begin{mdframed}\ifstrempty{#2}{\begin{thmm}}{\begin{thmm}[\text{#2}]}
+    \smartaddlabel{#1}{thm:}}
+    {\end{thmm}\end{mdframed}}
+
+    \newenvironment{definition}[2][]
+    {\begin{mdframed}\ifstrempty{#2}{\begin{defi}}{\begin{defi}[\text{#2}]}
+    \smartaddlabel{#1}{def:}}
+    {\end{defi}\end{mdframed}}
+
+    \newenvironment{corollary}[2][]
+    {\begin{mdframed}\ifstrempty{#2}{\begin{crll}}{\begin{crll}[\text{#2}]}
+    \smartaddlabel{#1}{crl:}}
+    {\end{crll}\end{mdframed}}
+
+    \newenvironment{proposition}[2][]
+    {\begin{mdframed}\ifstrempty{#2}{\begin{ppsn}}{\begin{ppsn}[\text{#2}]}
+    \smartaddlabel{#1}{pps:}}
+    {\end{ppsn}\end{mdframed}}
+
+    \newenvironment{property}[2][]
+    {\begin{mdframed}\ifstrempty{#2}{\begin{ppty}}{\begin{ppty}[\text{#2}]}
+    \smartaddlabel{#1}{ppt:}}
+    {\end{ppty}\end{mdframed}}
+
+    \newenvironment{notation}[2][]
+    {\begin{mdframed}\ifstrempty{#2}{\begin{nttn}}{\begin{nttn}[\text{#2}]}
+    \smartaddlabel{#1}{ntt:}}
+    {\end{nttn}\end{mdframed}}
+
+    \newenvironment{lemma}[2][]
+    {\begin{mdframed}\ifstrempty{#2}{\begin{lemm}}{\begin{lemm}[\text{#2}]}
+    \smartaddlabel{#1}{lem:}}
+    {\end{lemm}\end{mdframed}}
+
+    \newenvironment{motivation}[2][]
+    {\begin{mdframed}\ifstrempty{#2}{\begin{moti}}{\begin{moti}[\text{#2}]}
+    \smartaddlabel{#1}{mot:}}
+    {\end{moti}\end{mdframed}}
+
+    \newenvironment{problem}[2][]
+    {\begin{mdframed}\ifstrempty{#2}{\begin{ques}}{\begin{ques}[\text{#2}]}
+    \smartaddlabel{#1}{que:}}
+    {\end{ques}\end{mdframed}}
+
+    \newenvironment{idea}[2][]
+    {\begin{mdframed}\ifstrempty{#2}{\begin{ideaa}}{\begin{ideaa}[\text{#2}]}
+    \smartaddlabel{#1}{ida:}}
+    {\end{ideaa}\end{mdframed}}
+
+    \newenvironment{example}[2][]
+    {\begin{mdframed}\ifstrempty{#2}{\begin{exmp}}{\begin{exmp}[\text{#2}]}
+    \smartaddlabel{#1}{exp:}}
+    {\end{exmp}\end{mdframed}}
+
+    \newenvironment{conjecture}[2][]
+    {\begin{mdframed}\ifstrempty{#2}{\begin{coje}}{\begin{coje}[\text{#2}]}
+    \smartaddlabel{#1}{coj:}}
+    {\end{coje}\end{mdframed}}
+
+    \makeatletter
+    \newtheoremstyle{MyNonumberplain}%
+      {\item[\theorem@headerfont\hskip\labelsep\textit ##1\theorem@separator]}%
+      {\item[\theorem@headerfont\hskip\labelsep ##3\theorem@separator]}
+    \makeatother
+    \theoremstyle{nonumberplain}
+    \theorembodyfont{\upshape}
+    \theorempreskip{5pt}
+    \theorempostskip{0pt}
+    \newtheorem{remark}{Remark}
+    \newtheorem{shortexp}{Example}
+    \theoremstyle{MyNonumberplain}
+    \theoremsymbol{\ensuremath{\Box}}
+    \newtheorem{proof}{Proof}
+    \theoremseparator{}
+    \newtheorem{emptyproof}{}
+}
+
+\DeclareOption{math_color_box}{%
+  %-Vocab
+    \definecolor{myblue}{RGB}{71,91,121}
+  %-Remark and Proof
+    \newtheorem*{remark}{Remark}
+    \theoremsymbol{\ensuremath{\Box}}
+    \newtheorem*{proof}{Proof}
+  %-Section Headers
+    \definecolor{MSBlue}{RGB}{27,57,102}
+    \titlespacing*{\section}
+    {0pt}{-5pt}{-5pt}
+    \titlespacing*{\subsection}
+    {0pt}{0pt}{0pt}
+    \titlespacing*{\subsubsection}
+    {0pt}{0pt}{0pt}
+    \titleformat*{\section}{\Large\sffamily\bfseries\color{MSBlue}}
+    \titleformat*{\subsection}{\large\sffamily\bfseries\color{MSBlue}}
+    \titleformat*{\subsubsection}{\bfseries\sffamily\color{MSBlue}}
+  %-Colors
+    \definecolor{myblue}{RGB}{71,91,121}
+    \definecolor{mygreen}{RGB}{76,121,71}
+    \definecolor{mypurple}{RGB}{113,71,121}
+    \definecolor{mybrown}{RGB}{102,51,0}
+    \definecolor{mygrey}{RGB}{128,128,128}
+  %-tcolor style
+    \tcbset{mystyle/.style={
+      breakable,
+      enhanced,
+      outer arc=0pt,
+      arc=0pt,
+      attach boxed title to top left,
+      fonttitle=\sffamily,
+      boxed title style={
+        outer arc=0pt,
+        arc=0pt,
+        bottom=-1.3pt,
+        colback=#1,
+      },
+      colframe=#1,
+      colback=#1!10,
+      rightrule=0pt,
+      toprule=0pt,
+      left=6.5pt
+    }}
+    \tcbset{examplestyle/.style={
+      breakable,
+      enhanced,
+      outer arc=0pt,
+      arc=0pt,
+      attach boxed title to top left,
+      fonttitle=\sffamily,
+      coltitle=#1,
+      attach boxed title to top left={yshift=-1pt},
+      boxed title style={
+        outer arc=0pt,
+        arc=0pt,
+        bottom=-1.3pt,
+        colback=white,
+        toprule=0pt,
+        leftrule=0pt,
+        rightrule=0pt,
+        bottomrule=1.5pt,
+      },
+      colframe=#1,
+      colback=#1!10,
+      toprule=1pt,
+      rightrule=1pt,
+      leftrule=0pt,
+    }}
+}
+
+\DeclareOption{math_simple_box}{%
+  %---Section Headers
+    \titleformat*{\section}{\Large\sffamily\bfseries\color{black}}
+    \titleformat*{\subsection}{\large\sffamily\bfseries\color{black}}
+    \titleformat*{\subsubsection}{\bfseries\sffamily\color{black}}
+  %---tcolorbox
+    \definecolor{myblue}{RGB}{0,0,0}
+    \definecolor{mygreen}{RGB}{0,0,0}
+    \definecolor{mypurple}{RGB}{0,0,0}
+    \definecolor{mybrown}{RGB}{0,0,0}
+    \definecolor{mygrey}{RGB}{0,0,0}
+  %-tcb styles
+    \tcbset{mystyle/.style={
+      breakable,
+      enhanced,
+      outer arc=0pt,
+      arc=0pt,
+      attach boxed title to top left,
+      fonttitle=\sffamily,
+      colback=white,
+      coltitle=#1,
+      rightrule=0pt,
+      toprule=0pt,
+      bottomrule=0pt,
+      boxed title style={
+        colback=white,
+        toprule=0pt,
+        leftrule=0pt,
+        rightrule=0pt,
+        outer arc=0pt,
+        arc=0pt,
+        bottom=-1.3pt,
+      },
+    }}
+    \tcbset{examplestyle/.style={
+      mystyle=#1,
+      colback=#1!10,
+      toprule=1pt,
+      leftrule=1pt,
+      rightrule=1pt,
+      bottomrule=1pt,
+    }}
+
+}
+
+\DeclareOption{tcolorbox}{
+  %---Math Stuff + remark
+    \theoremseparator{.}
+    \newtheorem*{remark}{Remark}
+    \theoremsymbol{\ensuremath{\Box}}
+    \newtheorem*{proof}{Proof}
+
+  \crefname{definition}{definition}{definitions}
+  \newtcolorbox[auto counter,number within=section]{definition}[2][]{
+    label type=definition,
+    label=\smartlabelcounter{#1}{\thetcbcounter}{def:},
+    mystyle=myblue,
+    title=Definition ~\thetcbcounter\addbrackets{#2}
+  }
+
+  \crefname{theorem}{theorem}{theorems}
+  \newtcolorbox[auto counter,number within=section,use counter from=definition]{theorem}[2][]{
+    label type=theorem,
+    label=\smartlabelcounter{#1}{\thetcbcounter}{thm:},
+    mystyle=mygreen,
+    title=Theorem ~\thetcbcounter\addbrackets{#2},
+  }
+
+  \crefname{proposition}{proposition}{propositions}
+  \newtcolorbox[auto counter,number within=section,use counter from=definition]{proposition}[2][]{
+    label type=proposition,
+    label=\smartlabelcounter{#1}{\thetcbcounter}{pps:},
+    mystyle=mypurple,
+    title=Proposition ~\thetcbcounter\addbrackets{#2},
+  }
+
+  \crefname{notation}{notation}{notations}
+  \newtcolorbox[auto counter,number within=section,use counter from=definition]{notation}[2][]{
+    label type=notation,
+    label=\smartlabelcounter{#1}{\thetcbcounter}{ntt:},
+    mystyle=mygrey,
+    title=Notation ~\thetcbcounter\addbrackets{#2},
+  }
+
+  \crefname{terminology}{terminology}{terminologies}
+  \newtcolorbox[auto counter,number within=section,use counter from=definition]{terminology}[2][]{
+    label type=terminology,
+    label=\smartlabelcounter{#1}{\thetcbcounter}{tml:},
+    mystyle=mygrey,
+    title=Terminology ~\thetcbcounter\addbrackets{#2},
+  }
+
+  \crefname{property}{property}{properties}
+  \newtcolorbox[auto counter,number within=section,use counter from=definition]{property}[2][]{
+    label type=property,
+    label=\smartlabelcounter{#1}{\thetcbcounter}{ppt:},
+    mystyle=mygrey,
+    title=Properties ~\thetcbcounter\addbrackets{#2},
+  }
+
+  \crefname{corollary}{corollary}{corollaries}
+  \newtcolorbox[auto counter,number within=section,use counter from=definition]{corollary}[2][]{
+    label type=corollary,
+    label=\smartlabelcounter{#1}{\thetcbcounter}{crl:},
+    mystyle=mygrey,
+    title=Corollary ~\thetcbcounter\addbrackets{#2},
+  }
+
+  \crefname{example}{example}{examples}
+  \newtcolorbox[auto counter,number within=section,use counter from=definition]{example}[2][]{
+    label type=example,
+    label=\smartlabelcounter{#1}{\thetcbcounter}{exp:},
+    examplestyle=mybrown,
+    title=Example ~\thetcbcounter \addbrackets{#2},
+  }
+
+  \crefname{lemma}{lemma}{lemmas}
+  \newtcolorbox[auto counter,number within=section,use counter from=definition]{lemma}[2][]{
+    label type=lemma,
+    label=\smartlabelcounter{#1}{\thetcbcounter}{lem:},
+    mystyle=mygrey,
+    title=\color{mygrey}Lemma ~\thetcbcounter\addbrackets{#2},
+  }
+}
+
+\DeclareOption{xy}{%
+  \setlength\intextsep{0pt}
+  \opencutright
+  \newcommandx*\rxy[7][1=,3=1.5in,4=0,5=5,7=.45em]{
+    \renewcommand{\windowpagestuff}{\centering$\xymatrix#1{#2}$}
+    \vspace{#7}
+    \begin{cutout}{#4}{\dimexpr\linewidth-#3\relax}{0pt}{#5}
+      #6
+    \end{cutout}
+  }
+}
+
+\DeclareOption{asy}{%
+  \setlength\intextsep{0pt}
+  \opencutright
+  \newcommandx*\rasy[7][1=,3=1.5in,4=0,5=5,7=.45em]{
+    \renewcommand{\windowpagestuff}{#2}
+    \vspace{#7}
+    \begin{cutout}{#4}{\dimexpr\linewidth-#3\relax}{0pt}{#5}
+      #6
+    \end{cutout}
+  }
+}
+
+\DeclareOption{empty_style}{%
+    \makeatletter
+    \newtheoremstyle{myemptystyle}%
+      {\item[\theorem@headerfont\hskip\labelsep\textit ##1\theorem@separator]}%
+      {\item[\theorem@headerfont\hskip\labelsep ##3\theorem@separator]}
+    \makeatother
+    \theoremstyle{myemptystyle}
+    \theorembodyfont{\upshape}
+}
+
+\DeclareOption{asign}{%
+  \newcommand{\course}{MATH}
+  \newcommand{\asignnum}{1}
+  \newcommand{\myasignname}{\course\ Assignment \asignnum}
+  \title{\myasignname}
+  \newcommand{\asigntitle}{\section*{\myasignname}}
+  \newcommand{\omegatongid}{\FirstBigRestSmallCaps{Tong Nok To Omega 1155144164}}
+  \pagestyle{fancy}
+  \fancyhf{}
+  \fancyhead[R]{\myasignname}
+  \fancyhead[L]{\omegatongid}
+  \fancyfoot[R]{Page \rule[-2pt]{1pt}{11pt} \thepage}
+}
+
+\DeclareOption{imo}{%
+  \newcommand{\initproblem}[2]{\ifstrempty{#1}{#2}{#1}}
+
+  \newcommand{\courseTitle}{}
+  \newcommand{\courseTopic}{}
+  \newtoggle{ownans}
+  \newtoggle{officialans}
+  \date{\DTMusedate{mydate}}
+  \title{\iftoggle{ownans}{\color{red}}{}{\courseTitle\\\courseTopic}\iftoggle{ownans}{(With Solution)}{}}
+  \fancyhead[L]{}
+
+  \pagestyle{fancy}
+  \fancyhf{}
+  \fancyhead[L]{\iftoggle{ownans}{\color{red}}{}{\large\courseTopic}\iftoggle{ownans}{(With Solution)}{}}
+  \fancyhead[C]{\iftoggle{ownans}{}{\courseTitle}}
+  \fancyhead[R]{\iftoggle{ownans}{\color{red}}{}\omegat}
+  \fancyfoot[R]{\iftoggle{ownans}{\color{red}}{}Page \rule[-2pt]{1pt}{11pt} \thepage}
+
+  \newcounter{qcounter}
+  \newtoggle{plabel}
+  \toggletrue{plabel}
+
+  \newcommand{\ifinarry}{}
+
+  \newenvironment{question}[2][Problems for Discussion]
+    { \setcounter{qcounter}{0}
+      \section{\initproblem{#1}{Problems for Discussion}}
+      \renewcommand{\ifinarry}{
+        \ForEach{,}{\ifelementequal{\thislevelitem}{\theqcounter}}{#2}
+      }
+    }{}
+
+  \newcommand{\questionsuffix}{Problem}
+
+  \newenvironment{question*}[2][Problems for Discussion]
+    { \setcounter{qcounter}{0}
+      \renewcommand{\questionsuffix}{Problem}
+      \renewcommand{\ifinarry}{
+        \ForEach{,}{\ifelementequal{\thislevelitem}{\theqcounter}}{#2}
+      }
+    }{}
+
+  \newtoggle{tmpownans}
+
+  \newenvironment{example_question*}[2][Examples]
+    { \setcounter{qcounter}{0}
+      \iftoggle{ownans}{\toggletrue{tmpownans}}{\togglefalse{tmpownans}}
+        \toggletrue{ownans}
+      \renewcommand{\questionsuffix}{Example}
+      \renewcommand{\ifinarry}{
+        \ForEach{,}{\ifelementequal{\thislevelitem}{\theqcounter}}{#2}
+      }
+      }{
+      \iftoggle{tmpownans}{\toggletrue{ownans}}{\togglefalse{ownans}}
+    }
+    
+  \newcommand{\pitem}[4][]{
+    \noindent \textbf{\questionsuffix}\ \refstepcounter{qcounter}\theqcounter .\iftoggle{plabel}{\addbrackets{#1}}{}
+      #2 \iftoggle{ownans}{\\\\\noindent {\color{red}\textbf{Ans. }} #3\\}{}
+
+        \iftoggle{officialans}{\texttt{#4}}{}
+    \iftoggle{officialans}{}{\iftoggle{ownans}{}{\vfill}}
+    \ifinarry
+  }
+}
+
+\DeclareOption{tut}{%
+  %---title page-----------------------------------------------------
+    \newcommand{\myfrontpage}{%
+      \date{\DTMusedate{mydate}}
+      \begin{center}
+        \begin{LARGE}
+          \event\\
+        \end{LARGE}
+        \vspace{20pt}
+        \begin{Large}
+          \thetitle\\
+        \end{Large}
+        \vspace{15pt}
+        \begin{large}
+          \omegat
+        \end{large}
+        \\ \vspace{10pt}
+        \begin{large}
+          \thedate
+        \end{large}
+      \end{center}
+      \thispagestyle{empty}
+      \begin{spacing}{0}
+        \tableofcontents
+        %\listoffigures
+        %\listoftables
+      \end{spacing}
+      \newpage
+      \section{Learning Objectives}
+      \begin{enumerate}
+        \learningobjective
+      \end{enumerate}
+    }
+  %---Top Bar--------------------------------
+    \author{\omegat}
+    \pagestyle{fancy}
+    \fancyhf{}
+    \fancyhead[C]{\leftmark}
+    \fancyhead[R]{Page \rule[-2pt]{1pt}{11pt} \thepage}
+    \fancyhead[L]{\omegat}
+
+  \newcommand{\ifelementequal}[2]{
+    \ifthenelse{\equal{#1}{#2}}{\pagebreak}{}
+  }
+
+  %---Remark plus proof----------------------------------------
+    \makeatletter
+    \newtheoremstyle{MyNonumberplain}%
+      {\item[\theorem@headerfont\hskip\labelsep\textit ##1\theorem@separator]}%
+      {\item[\theorem@headerfont\hskip\labelsep ##3\theorem@separator]}
+    \makeatother
+    \theorembodyfont{\upshape}
+    \theoremseparator{.}
+    \theorempreskip{5pt}
+    \theorempostskip{0pt}
+    \theoremsymbol{\ensuremath{\Box}}
+    \newtheorem*{proof}{Proof}
+  
+  %---Mybreaks-----------------------------------------------------
+    \newcommand{\myframebreak}{}
+    \newcommand{\mycontinueframe}{}
+    \newcommand{\mynewpage}{\newpage}
+    \newcommand{\addbrackets}[1]{\ifstrempty{#1}{}{\ (#1)}}
+    \newcommand{\mysection}{\section}
+
+  \newcounter{qcounter}
+  \newtoggle{ownans}
+  \togglefalse{ownans}
+  \newtoggle{officialans}
+  \togglefalse{officialans}
+
+  \makeatletter
+  \newcommand\asycode[2][]{%
+    \stepcounter{asy}%
+    \setkeys{ASYkeys}{#1}%
+    \ifASYattach
+    \ASYinlinefalse
+    \fi
+    \ifx\asydir\empty\else
+    \def\ASYprefix{\asydir/}%
+    \fi
+    \immediate\write\AsyPreStream{%
+    \noexpand\InputIfFileExists{%
+      \ASYprefix\noexpand\jobname-\the\c@asy.pre}{}{}%
+    }
+    \asy@write@graphic@header
+    \immediate\write\AsyStream{\detokenize{#2}}% here asy does the writing
+    \asy@finalise@stream
+    \asy@input@graphic
+  }
+  \makeatother
+
+  \newcommand{\rightasy}[2][1.5in]{
+    \begin{wrapfigure}{r}{#1} %this figure will be at the right
+      \centering
+      \asycode{#2}
+    \end{wrapfigure}
+  }
+
+  \newcommand{\righttext}[2][1.5in]{
+    \begin{wrapfigure}{r}{#1} %this figure will be at the right
+      \centering
+      #2
+    \end{wrapfigure}
+  }
+
+  \newcommand{\rightfigure}[2][1.5in]{
+    \begin{wrapfigure}{r}{#1} %this figure will be at the right
+      \centering
+      \includegraphics[width=#1]{#2}
+    \end{wrapfigure}
+  }
+
+
+  \newcommand{\myrightasy}[3][2in]{
+    \noindent
+    \begin{minipage}{\linewidth-#1}
+      #2
+    \end{minipage}
+    \begin{minipage}{#1}
+      \begin{figure}[H]
+        %\asycode{import math; include graph; import olympiad; import geometry; import CSE5;#3}
+        \asycode{#3}
+      \end{figure}
+    \end{minipage}
+  }
+
+  \newcommand{\myasy}[3][r]{
+    \begin{wrapfigure}{#1}{#2}
+        \asycode{#3}
+    \end{wrapfigure}
+  }
+
+  \newtheorem*{remark}{Remark}
+  \newenvironment{definition}[2][def:] {
+    \nbf{Definition\addbrackets{#2}: }\vspace{.5em}\\
+    \vspace{.5em}
+    \noindent
+      \begin{minipage}[t]{0.025\textwidth}
+        \
+      \end{minipage}
+      \begin{minipage}[t]{0.97\textwidth}
+    }
+    {
+      \end{minipage}
+  }
+
+  \newenvironment{corollary}[2][def:] {
+    \nbf{Corollary\addbrackets{#2}: }\vspace{.5em}\\
+    \vspace{.5em}
+    \noindent
+      \begin{minipage}[t]{0.025\textwidth}
+        \
+      \end{minipage}
+      \begin{minipage}[t]{0.97\textwidth}
+    }
+    {
+      \end{minipage}
+  }
+
+  \newenvironment{theorem}[2][thm:] {
+    \nbf{Theorem\addbrackets{#2}: }\vspace{.5em}\\
+    \vspace{.5em}
+    \noindent
+      \begin{minipage}[t]{0.025\linewidth}
+        \
+      \end{minipage}
+      \begin{minipage}[t]{0.97\linewidth}
+    }
+    {
+      \end{minipage}
+  }
+
+  \newenvironment{newenv}[3][rnd:] {
+    \nbf{#3\addbrackets{#2}: }\vspace{.5em}\\
+    \vspace{.5em}
+    \noindent
+      \begin{minipage}[t]{0.025\textwidth}
+        \
+      \end{minipage}
+      \begin{minipage}[t]{0.97\textwidth}
+    }
+    {
+      \end{minipage}
+  }
+
+  \newcommand{\initproblem}[2]{\ifstrempty{#1}{#2}{#1}}
+  \newcommand{\thelisttopagebreak}{}
+  \newcommand{\ifinarry}{}
+
+  \newenvironment{question}[2][Problems for Discussion]
+    { \setcounter{qcounter}{0}
+      \section{\initproblem{#1}{Problems for Discussion}}
+      %\renewcommand{\thelisttopagebreak}{#2}
+      \renewcommand{\ifinarry}{
+        \ForEach{,}{\ifelementequal{\thislevelitem}{\theqcounter}}{#2}
+      }
+
+    }
+    {
+    }
+
+  \newenvironment{subquestion}[2][Problems for Discussion]
+    { \setcounter{qcounter}{0}
+      \subsection{\initproblem{#1}{Problems for Discussion}}
+      %\renewcommand{\thelisttopagebreak}{#2}
+      \renewcommand{\ifinarry}{
+        \ForEach{,}{\ifelementequal{\thislevelitem}{\theqcounter}}{#2}
+      }
+
+    }
+    {
+    }
+
+  \newenvironment{subsubquestion}[2][Problems for Discussion]
+    { \setcounter{qcounter}{0}
+      \subsubsection{\initproblem{#1}{Problems for Discussion}}
+      %\renewcommand{\thelisttopagebreak}{#2}
+      \renewcommand{\ifinarry}{
+        \ForEach{,}{\ifelementequal{\thislevelitem}{\theqcounter}}{#2}
+      }
+
+    }
+    {
+    }
+
+  \newenvironment{shortque*}[2][Problems]
+    { \setcounter{qcounter}{0}
+      \renewcommand{\ifinarry}{
+        \ForEach{,}{\ifelementequal{\thislevelitem}{\theqcounter}}{#2}
+      }
+    }
+    {
+    }
+
+  \newenvironment{shortque}[2][Problems]
+    { \setcounter{qcounter}{0}
+      \subsection{\initproblem{#1}{Problems}}
+      \renewcommand{\ifinarry}{
+        \ForEach{,}{\ifelementequal{\thislevelitem}{\theqcounter}}{#2}
+      }
+    }
+    {
+    }
+
+  \newenvironment{example}[2][exp:]
+    { \setcounter{qcounter}{0}
+      \subsection{\initproblem{#2}{Example}}
+    }
+    {
+    }
+
+  \newenvironment{example*}[2][exp:]
+    { \setcounter{qcounter}{0}
+      \subsection*{\initproblem{#2}{Example}}
+    }
+    {
+    }
+
+  \newenvironment{mysubsection}[1]
+    { \ifstrempty{#1}{}{\subsection{#1}}
+    }
+    {
+    }
+
+  \newcommand{\eitem}[2]{
+    \noindent\refstepcounter{qcounter}
+    \begin{minipage}[t]{.045\linewidth}
+      \begin{flushright}
+        \theqcounter.\phantom{.}
+      \end{flushright}
+    \end{minipage}
+    \begin{minipage}[t]{.94\linewidth}
+      #1
+    \end{minipage}
+
+      { \noindent
+        \begin{minipage}[t]{0.053\textwidth}
+          \
+        \end{minipage}
+        \begin{minipage}[t]{0.942\textwidth}
+          #2
+        \end{minipage}
+      }
+  }
+    
+  \newcommand{\qitem}[3]{
+    \noindent\refstepcounter{qcounter}
+    \begin{minipage}[t]{.045\textwidth}
+      \begin{flushright}
+        \theqcounter.\phantom{.}
+      \end{flushright}
+    \end{minipage}
+    \begin{minipage}[t]{.94\textwidth}
+      #1
+    \end{minipage}
+
+    \iftoggle{ownans}
+      { \noindent
+        \begin{minipage}[t]{0.053\textwidth}
+          \
+        \end{minipage}
+        \begin{minipage}[t]{0.942\textwidth}
+          #2
+        \end{minipage}
+      }{\vfill}
+    
+    \iftoggle{officialans}
+      { \noindent
+        \begin{minipage}[t]{0.053\textwidth}
+          \
+        \end{minipage}
+        \begin{minipage}[t]{0.942\textwidth}
+          #3
+        \end{minipage}
+      }{\vspace{1em}}
+    \iftoggle{officialans}{}{\iftoggle{ownans}{}{\vfill}}
+    \ifinarry
+  }
+}
+
+\ProcessOptions\relax
+
