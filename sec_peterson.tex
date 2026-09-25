@@ -1,0 +1,93 @@
+\section{Peterson Variety}
+
+Let $Y\in \mathfrak{g}$, $H\subseteq \mathfrak{g}$ s.t. $[H,\mathfrak{b}]\subseteq H$. Define
+\[
+  Hess(Y,H):=\CB{gB:Ad(g^{-1})Y\in H}\subseteq G/B.
+\]
+In type A, $H$ can be described using a non-decreasing function $h:[n]\rightarrow [n]$ such that $h(i)\geq i$. Pick a standard flag $(E_1,E_2,\dots ,E_n)\in Fl(\mathbb{C}^n)$. Define
+\[
+  H_h:=\CB{A\in \mathfrak{gl}_n\mid AE_i\subseteq E_{h_i}}.
+\]
+An alternative describsion of Hessenberg variety is
+\[
+  Hess(X,H_h) =\CB{V_\bullet\in Fl(\mathbb{C}^n)\mid XV_j\subseteq V_{h_j}\ \forall\ 1\leq j\leq n}.
+\]
+
+We focuse on regular nilpotent Hessenberg variety, i.e. when $Y=N:=E_{12}+E_{23}+\cdots +E_{n-1n}$. In this case, we have a $\Gm$ action given by
+\[
+  \lambda(t)=diag(t^n,t^{n-1},\dots ,t).
+\]
+This can be seen from the fact that $\lambda(t)^{-1}N\lambda(t)=tN$.
+\begin{definition}[def:]{}
+  Peterson variety is defined as $Hess(N,H_{Pet})$ with $Pet(i)=\min(i+1,n)$.
+\end{definition}
+
+Since $\lambda$ is regular, the fixed points $Hess(N,H_h)^{\lambda(\mathbb{C}^\times )}$ are the permutation flags $wB$.
+One way to study Peterson variety is to look at its intersection with the bruhat cells $BwB/B$. Since $w^{-1}Nw=\sum_{i=1}^{n-1}E_{w^{-1}(i), w^{-1}(i+1)}$, it lies in $H_{Pet}$ if and only if either $w^{-1}(i)>w^{-1}(i+1)$, or $w^{-1}(i)=w(i+1)+1$, or equivalently $w=w_J$ be the longest element of $W_J=\AB{s_i\mid i\in J }$ for some $J\subseteq [n-1]$.
+Indeed, we have the following:
+
+\begin{lemma}[lem:]{}
+  The $\mathbb{C}^\times $ fixed points are of Peterson variety are $\CB{w_J\mid J\subseteq [n-1]}$. Furthermore, the BB-cells are precisely the intersection with the Bruhat cells, i.e.
+  $X_J^+=Pet_n\cap BwJB/B$.
+  \begin{proof}
+    For $x\in BwB/B$, $x=bwB$. Write $b=ut$, we can absorb $t$ on the right as $w^{-1}tw\in T\subseteq B$, $twB=w(w^{-1}tw)B=wB$. Hence we can write $x=uwB$. Since $\lim_{t\rightarrow 0}\lambda(t)u\lambda(t)^{-1}\rightarrow 1$, we have
+    \[
+      \lim_{t\rightarrow 0}\lambda(t)\cdot uwB=\lim_{t\rightarrow 0}(\lambda(t)u\lambda(t)^{-1})wB=wB.
+    \]
+  \end{proof}
+\end{lemma}
+
+We would like to give a description of the positive BB-cells:
+\begin{lemma}[lem:]{}
+  Write $J\subseteq [n-1]$ as disjoint union of connected commponents $J=C_1\sqcup\cdots \sqcup C_s$, where $C_i=[p_i,q_i]$ and $p_{i+1}-q_i>1$. Define
+  \[
+    N_i=E_{p_i,p_i+1}+\cdots +E_{q_i,q_i+1}.
+  \]
+  Then
+  \[
+    X_J^+=\CB{u_J(a)w_JB; a_{i,j}\in \mathbb{C}},\quad u_J(a):=\prod_{i}^{}\left(1+a_{i,1}N_{i}+\cdots +a_{i,|C_i|}N_{i}^{|C_i|}\right).
+  \]
+  In particular, $X^+_J\simeq \mathhbb{A}^{|J|}$. For $J=[n-1]$, we have $X_{[n-1]}^+=Z_U(N)$.
+  \begin{proof}
+    We prove the case of $J=[n-1]$. The general case follow from breaking down the calculation block by block labelled by $C_i$. Write $x\in Bw_0B/B$ as $uw_0B$ as above. Peterson condition says $w_0^{-1}u^{-1}Nuw_0\in H_{Pet}$. Note that $w_0H_{Pet}w_0^{-1}=\mathfrak{b}^-+\CB{\textnormal{positive simple root spaces}}$. But $u^{-1}Nu\in \mathfrak{n}^+=Lie(U)$. This forces $u^{-1}Nu=N$. The proof concludes by noticing $Z_U(N)=\CB{1+a_1N+a_2N;=2+\cdots +a_{n-1}N^{n-1}}$.
+  \end{proof}
+\end{lemma}
+
+Next we are interested in studying $U_{I,J}=X_I^{-}\cap X_J^+$. In particular, we are asking for $x=MB\in X_J^+$, when is $x\in B^{-1}w_IB/B$. Let $V_k=\span\CB{\textnormal{first }k\textnormal{ columns of }M}$, and let the opposite coordinate flag be $E_r^-=\span(e_{n-r+1,\dots ,e_n})$. Then $x\in B^-w_IB/B$ iff
+\[
+  \dim(V_k\cap E_r^-)=\#\CB{j\leq k\mid w_I(j)\geq n-r+1}.
+\]
+
+\begin{lemma}[lem:]{}
+  Let $x=u_J(a)w_JB\in B_+w_JB/B$. Denote by $\Delta_i$ the $i$-th principal minor of $u_J(a)w_J$. Then $x\in B^-w_IB/B$ iff $\Delta_i=0$ for $i\in I$ and $\Delta_i\neq 0$ if $i\notin I$.
+  \begin{proof}
+    Observe that $\Delta_k(lwb)=0$ iff $\Delta_k(w)=0$.
+    The proof conlcudes by $\Delta_k(w)\neq 0$ iff $w([k])=[k]$. More precisely, by construction, for $k\neq I$, we have $w_I([k])=[k]$, and for $k\in I$, we have $w_I([k])\neq [k]$.
+  \end{proof}
+\end{lemma}
+
+\begin{example}[exp:]{}
+  For $Pet_3$, $M=\pmx{b&a&1\\a&1&0\\1&0&0}$. The two principal minors are $\Delta_1=b,\Delta_2=b-a^2$. $U_{\emptyset ,12}=\CB{a,b\mid b\neq 0,b-a^2\neq 0}\simeq \Gm^2$. 
+
+  $U_{I,J}$ can be irreducible in general.
+  For $Pet_4$, the 3 principal minors are $\Delta_1=c$, $\Delta_2=ac-b^2$, $\Delta_3=-a^3+2ab-c$. For $I=\CB{1,3}$, $J=\CB{1,2,3}$, we have $c=0, -b^2\neq 0$, and $a(2b-a^2)=0$. We see that $U_{13,123}\simeq \Gm\sqcup \Gm$.
+\end{example}
+
+<++>
+
+\begin{remark}
+  In the case of full flag variety, there is a automorphism exchanging $X^+$ and $X^-$ given by
+  \[
+    L_{w_0}:G/B\rightarrow G/B, gB\mapsto w_0gB.
+  \]
+  Since $w_0Bw_0^{-1}=B^-$, we get
+  \[
+    L_{w_0}(BwB/B)=B^-(w_0w)B/B.
+  \]
+  Notice that $w_0\lambda(t)w_0^{-1}=t^{n+1}\lambda(t)^{-1}$. Since $t^{n+1}I$ acts trivially on $G/B$, $L_{w_0}$ reverse the flow of the BB cells.
+  But this automorphism does not preserve Peterson variety, it sends Peterson to a different Hessenberg variety:
+  \[
+    L_{w_0}(Hess(N,H_{Pet}))=Hess(w_0Nw_0^{-1},H_{Pet}).
+  \]
+  The difficulty lies in finding the intersections of the opposite cells with Peterson variety.
+\end{remark}
