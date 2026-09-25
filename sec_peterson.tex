@@ -15,7 +15,7 @@ An alternative describsion of Hessenberg variety is
 
 We focuse on regular nilpotent Hessenberg variety, i.e. when $Y=N:=E_{12}+E_{23}+\cdots +E_{n-1n}$. In this case, we have a $\Gm$ action given by
 \[
-  \lambda(t)=diag(t^n,t^{n-1},\dots ,t).
+  \lambda(t)=diag(t,t^2,\dots ,t^n).
 \]
 This can be seen from the fact that $\lambda(t)^{-1}N\lambda(t)=tN$.
 \begin{definition}[def:]{}
@@ -30,15 +30,15 @@ Indeed, we have the following:
   The $\mathbb{C}^\times $ fixed points are of Peterson variety are $\CB{w_J\mid J\subseteq [n-1]}$. Furthermore, the BB-cells are precisely the intersection with the Bruhat cells, i.e.
   $X_J^+=Pet_n\cap BwJB/B$.
   \begin{proof}
-    For $x\in BwB/B$, $x=bwB$. Write $b=ut$, we can absorb $t$ on the right as $w^{-1}tw\in T\subseteq B$, $twB=w(w^{-1}tw)B=wB$. Hence we can write $x=uwB$. Since $\lim_{t\rightarrow 0}\lambda(t)u\lambda(t)^{-1}\rightarrow 1$, we have
+    For $x\in BwB/B$, $x=bwB$. Write $b=ut$, we can absorb $t$ on the right as $w^{-1}tw\in T\subseteq B$, $twB=w(w^{-1}tw)B=wB$. Hence we can write $x=uwB$. Since $\lim_{t\rightarrow 0}\lambda(t)^{-1}u\lambda(t)\rightarrow 1$, we have
     \[
-      \lim_{t\rightarrow 0}\lambda(t)\cdot uwB=\lim_{t\rightarrow 0}(\lambda(t)u\lambda(t)^{-1})wB=wB.
+      \lim_{t\rightarrow 0}\lambda(t)\cdot uwB=\lim_{t\rightarrow 0}(\lambda(t)^{-1}u\lambda(t))wB=wB.
     \]
   \end{proof}
 \end{lemma}
 
 We would like to give a description of the positive BB-cells:
-\begin{lemma}[lem:]{}
+\begin{lemma}[lem:coordinate_XJ]{}
   Write $J\subseteq [n-1]$ as disjoint union of connected commponents $J=C_1\sqcup\cdots \sqcup C_s$, where $C_i=[p_i,q_i]$ and $p_{i+1}-q_i>1$. Define
   \[
     N_i=E_{p_i,p_i+1}+\cdots +E_{q_i,q_i+1}.
@@ -47,13 +47,16 @@ We would like to give a description of the positive BB-cells:
   \[
     X_J^+=\CB{u_J(a)w_JB; a_{i,j}\in \mathbb{C}},\quad u_J(a):=\prod_{i}^{}\left(1+a_{i,1}N_{i}+\cdots +a_{i,|C_i|}N_{i}^{|C_i|}\right).
   \]
-  In particular, $X^+_J\simeq \mathhbb{A}^{|J|}$. For $J=[n-1]$, we have $X_{[n-1]}^+=Z_U(N)$.
+  In particular, $X^+_J\simeq \mathbb{A}^{|J|}$. For $J=[n-1]$, we have $X_{[n-1]}^+=Z_U(N)$.
   \begin{proof}
     We prove the case of $J=[n-1]$. The general case follow from breaking down the calculation block by block labelled by $C_i$. Write $x\in Bw_0B/B$ as $uw_0B$ as above. Peterson condition says $w_0^{-1}u^{-1}Nuw_0\in H_{Pet}$. Note that $w_0H_{Pet}w_0^{-1}=\mathfrak{b}^-+\CB{\textnormal{positive simple root spaces}}$. But $u^{-1}Nu\in \mathfrak{n}^+=Lie(U)$. This forces $u^{-1}Nu=N$. The proof concludes by noticing $Z_U(N)=\CB{1+a_1N+a_2N;=2+\cdots +a_{n-1}N^{n-1}}$.
   \end{proof}
 \end{lemma}
+\begin{remark}
+  Since $\lambda(t)^{-1}N\lambda(t)=tN$, $\lambda^{-1}N^s\lambda(t)=t^sN$. $\lambda$ acting on $u_J(a)$ with weights $t^s$ on coordinate $a_{i,s}$.
+\end{remark}
 
-Next we are interested in studying $U_{I,J}=X_I^{-}\cap X_J^+$. In particular, we are asking for $x=MB\in X_J^+$, when is $x\in B^{-1}w_IB/B$. Let $V_k=\span\CB{\textnormal{first }k\textnormal{ columns of }M}$, and let the opposite coordinate flag be $E_r^-=\span(e_{n-r+1,\dots ,e_n})$. Then $x\in B^-w_IB/B$ iff
+Next we are interested in studying $U_{I,J}=X_I^{-}\cap X_J^+$. In particular, we are asking for $x=MB\in X_J^+$, when is $x\in B^{-1}w_IB/B$. Let $V_k=\Span\CB{\textnormal{first }k\textnormal{ columns of }M}$, and let the opposite coordinate flag be $E_r^-=\Span(e_{n-r+1,\dots ,e_n})$. Then $x\in B^-w_IB/B$ iff
 \[
   \dim(V_k\cap E_r^-)=\#\CB{j\leq k\mid w_I(j)\geq n-r+1}.
 \]
@@ -71,6 +74,18 @@ Next we are interested in studying $U_{I,J}=X_I^{-}\cap X_J^+$. In particular, w
 
   $U_{I,J}$ can be irreducible in general.
   For $Pet_4$, the 3 principal minors are $\Delta_1=c$, $\Delta_2=ac-b^2$, $\Delta_3=-a^3+2ab-c$. For $I=\CB{1,3}$, $J=\CB{1,2,3}$, we have $c=0, -b^2\neq 0$, and $a(2b-a^2)=0$. We see that $U_{13,123}\simeq \Gm\sqcup \Gm$.
+
+  For $I=\CB{1}$, $J=\CB{1,2,3}$, we instead of $c=0,b\neq 0,a\neq 0,2b-a^2\neq 0$. Note that $b/a^2$ is $\Gm$ invariant by the remark preceeding \Cref{lem:coordinate_XJ}. Hence 
+  \[
+    Q_{1,123}:=U_{1,123}/\Gm=\mathbb{A}^1\setminus \CB{0,1/2}\simeq \mathbb{P}^1\setminus \CB{0,1/2,\infty }.
+  \]
+  We expect the boundary of the compactification $Q_{1,123}$ correspond to the broken trajectories from fixed point $1$ to $123$.
+  We can see that $0$ correspond to $b=0$, hence $\Delta_2=0$ as $c=0$. This coorespond to $U_{12,123}$.
+  On the other hand, $\frac{1}{2}$ and $\infty $ corresponds to the two $\Gm$ compnents in $U_{13,123}$ respectively.
+\end{example}
+
+\begin{example}[exp:]{}
+  Point counting for $Pet_6$ fails to give P-kernel. Consider $I=\CB{1,3,5}$, $J=\CB{1,2,3,4,5}$. $U_{I,J}$ is given by $\Delta_1=\Delta_3=\Delta_5=0$ and $\Delta_2\Delta_4\neq 0$. Using coordinates $(a,b,c,d,e)$ for $X_J^+$, 
 \end{example}
 
 <++>
