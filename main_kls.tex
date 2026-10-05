@@ -11,6 +11,7 @@
 }}
 
 \newcommand\Gm{{\mathbb{G}_m}}
+\newcommand\Ga{\mathbb{G}_a}
 \newcommand\Fq{{\mathbb{F}_q}}
 \newcommand\Ql{{\mathbb{Q}_l}}
 \newcommand\LL{{\mathbb{L}}}
@@ -26,6 +27,10 @@
 \newcommandx*\aXV[1][1=V]{\underline{X}_{#1}}
 \newcommandx*\aCHM[1][1=M]{\underline{\text{CH}}(#1)}
 \newcommandx\Bl[2]{\text{Bl}_{#1}(#2)}
+
+\newcommand\nn{\mathbf{n}}
+\renewcommand\ss{\mathbf{s}}
+\renewcommand\aa{\mathbf{a}}
 
 \begin{document}
 \maketitle
@@ -344,6 +349,7 @@ evaluation is compatible with the bar operation, i.e. $\overline{\kappa(\LL)}=\o
 
 %Bialynichi-Birula original work is on smooth complete $\Gm$-variety. He shows that the cells are locally closed subvariety isomorphic to some affine spaces $\mathbb{A}^n$. 
 
+\input{./sec_subspace_arrangement.tex}
 \input{./sec_peterson.tex}
 
 \bibliographystyle{alpha}
